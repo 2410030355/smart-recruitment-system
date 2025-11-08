@@ -4,3 +4,5 @@
 # Ignore text uploads but keep requirements.txt
 *.txt
 !requirements.txt
+.env
+config.py
