@@ -8,7 +8,14 @@ from datetime import datetime
 
 # Load local model once
 print("🔄 Loading AI model... (this happens once)")
-model = SentenceTransformer('all-MiniLM-L6-v2')
+model = None
+def get_model():
+    global model
+    if model is None:
+        from sentence_transformers import SentenceTransformer
+        model = SentenceTransformer('all-MiniLM-L6-v2')
+    return model
+
 print("✅ AI model loaded successfully!")
 def extract_text_from_pdf(pdf_file):
     """Extracts text from an uploaded PDF file."""
@@ -29,6 +36,7 @@ def extract_text_from_pdf(pdf_file):
 
 def get_embedding(text):
     """Get embeddings using local model."""
+    model = get_model()
     if not text.strip():
         return None
     try:
