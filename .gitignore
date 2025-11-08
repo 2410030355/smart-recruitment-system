@@ -1,23 +1,6 @@
-# API Keys and Config
-config.py
-*.key
-.env
-
-# Python
-pycache/
-*.pyc
-
-# Uploads
-uploads/
 *.pdf
 *.doc
 *.docx
+# Ignore text uploads but keep requirements.txt
 *.txt
-
-# PyCharm
-.idea/
-*.iml
-
-# System
-.DS_Store
-Thumbs.db
+!requirements.txt
