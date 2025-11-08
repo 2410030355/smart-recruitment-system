@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Search Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .job-desc-box {
+            background: rgba(16, 20, 35, 0.8);
+            border: 2px solid #2dd4bf;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .job-desc-box h3 {
+            color: #2dd4bf;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .job-desc-box p {
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(16, 20, 35, 0.6);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9em;
+            color: #a0aec0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #2dd4bf;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .label {
+            font-size: 0.9em;
+            color: #718096;
+        }
+
+        .candidates-section {
+            background: rgba(16, 20, 35, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .candidates-section h2 {
+            color: #2dd4bf;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8em;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2dd4bf;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .candidate-name {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .candidate-email {
+            font-size: 0.85em;
+            color: #a0aec0;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .score-perfect {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .score-strong {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+
+        .score-good {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-perfect {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+        }
+
+        .status-strong {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+
+        .status-good {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .keyword-tag {
+            background: rgba(102, 126, 234, 0.2);
+            color: #a78bfa;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            border: 1px solid rgba(167, 139, 250, 0.3);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .btn-view {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+
+        .btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-interview {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .btn-interview:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            margin: 5% auto;
+            padding: 0;
+            border: 2px solid rgba(102, 126, 234, 0.5);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px 30px;
+            border-radius: 13px 13px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .close {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .close:hover {
+            transform: scale(1.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2dd4bf;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(16, 20, 35, 0.8);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 1em;
+        }
+
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-send {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 12px 30px;
+        }
+
+        .btn-send:hover {
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-cancel {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+            padding: 12px 30px;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        /* Success notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+            display: none;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Quantum Search Results</h1>
+            <p>AI-Powered Candidate Matching Analysis</p>
+        </div>
+
+        <div class="job-desc-box">
+            <h3>📋 Job Description Analyzed:</h3>
+            <p>"{{ job_description }}"</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Resumes Scanned</h3>
+                <div class="number">{{ total_resumes }}</div>
+                <div class="label">Quantum database entries</div>
+            </div>
+            <div class="stat-card">
+                <h3>AI Matches Found</h3>
+                <div class="number">{{ matched_candidates }}</div>
+                <div class="label">Neural matches initiated</div>
+            </div>
+            <div class="stat-card">
+                <h3>Recommended Shortlist</h3>
+                <div class="number">{{ shortlisted }}</div>
+                <div class="label">Successful placements</div>
+            </div>
+        </div>
+
+        <div class="candidates-section">
+            <h2>💎 Top Matching Candidates</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Candidate</th>
+                            <th>AI Match Score</th>
+                            <th>Status</th>
+                            <th>Experience</th>
+                            <th>Matched Keywords</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for candidate in candidates %}
+                        <tr>
+                            <td>
+                                <div class="candidate-name">{{ candidate.name }}</div>
+                                <div class="candidate-email">{{ candidate.email }}</div>
+                            </td>
+                            <td>
+                                <span class="score-badge {% if candidate.score >= 85 %}score-perfect{% elif candidate.score >= 70 %}score-strong{% else %}score-good{% endif %}">
+                                    {{ candidate.score }}%
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-badge {% if candidate.status == 'Perfect Match' %}status-perfect{% elif candidate.status == 'Strong Match' %}status-strong{% else %}status-good{% endif %}">
+                                    {{ candidate.status }}
+                                </span>
+                            </td>
+                            <td>{{ candidate.experience }}</td>
+                            <td>
+                                <div class="keywords">
+                                    {% for keyword in candidate.matched_keywords[:3] %}
+                                        <span class="keyword-tag">{{ keyword }}</span>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-view" onclick="viewCandidate('{{ candidate.name }}')">View</button>
+                                    <button class="btn btn-interview" onclick="openEmailModal('{{ candidate.name }}', '{{ candidate.email }}', {{ candidate.score }}, '{{ candidate.experience }}', {{ candidate.matched_keywords|tojson }})">Interview</button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <a href="/quantum-search" class="back-btn">← Back to Search</a>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📧 Send Interview Invitation</h2>
+                <span class="close" onclick="closeEmailModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="emailForm">
+                    <div class="form-group">
+                        <label for="candidateName">Candidate Name:</label>
+                        <input type="text" id="candidateName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="candidateEmail">Email Address:</label>
+                        <input type="email" id="candidateEmail" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailSubject">Subject:</label>
+                        <input type="text" id="emailSubject" value="Interview Invitation">
+                    </div>
+                    <div class="form-group">
+                        <label for="emailContent">Email Message:</label>
+                        <textarea id="emailContent" placeholder="Generating email..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" onclick="closeEmailModal()">Cancel</button>
+                <button class="btn btn-send" onclick="sendEmail()">Send Email</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Notification -->
+    <div id="notification" class="notification">
+        <strong>✅ Success!</strong><br>
+        <span id="notificationMessage">Email sent successfully!</span>
+    </div>
+
+    <script>
+        // View candidate details - Navigate to scorecard
+        function viewCandidate(candidateName) {
+            // Navigate to the scorecard page
+            window.location.href = `/scorecard/${encodeURIComponent(candidateName)}`;
+        }
+
+        // Open email modal
+        function openEmailModal(name, email, score, experience, matchedSkills) {
+            document.getElementById('candidateName').value = name;
+            document.getElementById('candidateEmail').value = email;
+            document.getElementById('emailContent').value = 'Generating personalized email...';
+
+            // Show modal
+            document.getElementById('emailModal').style.display = 'block';
+
+            // Generate email content
+            fetch('/api/generate-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    candidate_name: name,
+                    candidate_email: email,
+                    score: score,
+                    experience: experience,
+                    matched_skills: matchedSkills
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('emailSubject').value = data.subject;
+                    document.getElementById('emailContent').value = data.email_content;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('emailContent').value = 'Error generating email. Please try again.';
+            });
+        }
+
+        // Close email modal
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        // Send email
+        function sendEmail() {
+            const candidateEmail = document.getElementById('candidateEmail').value;
+            const subject = document.getElementById('emailSubject').value;
+            const content = document.getElementById('emailContent').value;
+
+            if (!candidateEmail || !subject || !content) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Disable send button
+            event.target.disabled = true;
+            event.target.textContent = 'Sending...';
+
+            fetch('/api/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: candidateEmail,
+                    subject: subject,
+                    content: content
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success notification
+                    document.getElementById('notificationMessage').textContent = data.message;
+                    document.getElementById('notification').classList.add('show');
+
+                    // Close modal
+                    closeEmailModal();
+
+                    // Hide notification after 3 seconds
+                    setTimeout(() => {
+                        document.getElementById('notification').classList.remove('show');
+                    }, 3000);
+                } else {
+                    alert('Error: ' + data.message);
+                }
+
+                // Re-enable send button
+                event.target.disabled = false;
+                event.target.textContent = 'Send Email';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error sending email. Please try again.');
+                event.target.disabled = false;
+                event.target.textContent = 'Send Email';
+            });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target == modal) {
+                closeEmailModal();
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeEmailModal();
+            }
+        });
+    </script>
+</body>
+</html>

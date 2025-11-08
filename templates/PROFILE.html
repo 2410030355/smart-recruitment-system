@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile - Quantum Recruitment AI</title>
+    <style>
+        :root {
+            --cyber-emerald: #00FFAB;
+            --neon-violet: #BC13FE;
+            --quantum-blue: #0066FF;
+            --cyber-orange: #FF6B35;
+            --dark-matter: #0A0A0F;
+            --space-gray: #1A1A2E;
+            --starlight: #E0F7FA;
+            --matrix-green: #00FF41;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--dark-matter) 0%, var(--space-gray) 100%);
+            color: var(--starlight);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(10, 10, 15, 0.8);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 171, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .profile-sidebar, .profile-content {
+            background: rgba(26, 26, 46, 0.6);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 171, 0.2);
+        }
+
+        .profile-avatar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .profile-stats {
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 255, 171, 0.2);
+        }
+
+        .stat-value {
+            color: var(--cyber-emerald);
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--cyber-emerald);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(0, 255, 171, 0.3);
+            border-radius: 8px;
+            color: var(--starlight);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--cyber-emerald), var(--quantum-blue));
+            color: var(--dark-matter);
+        }
+
+        .btn-secondary {
+            background: rgba(0, 255, 171, 0.1);
+            color: var(--cyber-emerald);
+            border: 1px solid var(--cyber-emerald);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 171, 0.3);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .section-title {
+            color: var(--cyber-emerald);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            border-bottom: 2px solid rgba(0, 255, 171, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--cyber-emerald), var(--quantum-blue));
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 255, 171, 0.3);
+        }
+
+        .success-message {
+            background: rgba(0, 255, 171, 0.1);
+            color: var(--cyber-emerald);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 255, 171, 0.3);
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👤 My Profile</h1>
+            <p>Manage your Quantum Recruitment AI account settings</p>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            Profile updated successfully!
+        </div>
+
+        <div class="profile-grid">
+            <!-- Sidebar -->
+            <div class="profile-sidebar">
+                <div class="profile-avatar">
+                    <div class="avatar">👨‍💼</div>
+                    <h3>{{ recruiter.name }}</h3>
+                    <p style="color: var(--cyber-emerald); opacity: 0.8;">Senior Recruiter</p>
+                </div>
+
+                <div class="profile-stats">
+                    <h4 class="section-title">📊 Quick Stats</h4>
+                    <div class="stat-item">
+                        <span>Searches This Month</span>
+                        <span class="stat-value">12</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Candidates Reviewed</span>
+                        <span class="stat-value">156</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Successful Hires</span>
+                        <span class="stat-value">18</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Match Accuracy</span>
+                        <span class="stat-value">94%</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; padding: 20px; background: rgba(0, 255, 171, 0.1); border-radius: 8px;">
+                    <h4 style="color: var(--cyber-emerald); margin-bottom: 10px;">🔒 Account Security</h4>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">
+                        {% if session.get('login_method') == 'google' %}
+                            🔗 Connected via Google OAuth
+                        {% else %}
+                            📧 Email & Password
+                        {% endif %}
+                    </p>
+                    <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">
+                        Last login: Just now
+                    </p>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="profile-content">
+                <h4 class="section-title">📝 Edit Profile Information</h4>
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" value="{{ recruiter.name }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" value="{{ session.recruiter_email }}" readonly style="background: rgba(26, 26, 46, 0.4);">
+                        <small style="color: var(--cyber-emerald); font-size: 0.8rem;">
+                            {% if session.get('login_method') == 'google' %}
+                                Email managed by Google
+                            {% else %}
+                                Primary login email
+                            {% endif %}
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" name="company" value="Quantum Recruitment AI" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="position">Position/Title</label>
+                        <input type="text" id="position" name="position" value="Senior Recruiter" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <select id="department" name="department">
+                            <option value="technology">Technology & Engineering</option>
+                            <option value="hr">Human Resources</option>
+                            <option value="talent">Talent Acquisition</option>
+                            <option value="executive">Executive</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bio">Professional Bio</label>
+                        <textarea id="bio" name="bio" placeholder="Tell us about your professional background and expertise...">Senior Recruiter specializing in technology roles with expertise in AI-powered candidate matching and quantum recruitment methodologies.</textarea>
+                    </div>
+
+                    {% if session.get('login_method') != 'google' %}
+                    <h4 class="section-title">🔐 Change Password</h4>
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" name="currentPassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" name="newPassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword">
+                    </div>
+                    {% endif %}
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            💾 Save Changes
+                        </button>
+                        <a href="/dashboard" class="btn btn-secondary">
+                            ← Back to Dashboard
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="/dashboard" class="nav-btn">📊 Dashboard</a>
+            <a href="/quantum-search" class="nav-btn">🔍 Quantum Search</a>
+            <a href="/results" class="nav-btn">📈 View Results</a>
+        </div>
+    </div>
+<script>
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Simulate form submission
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+
+            // In a real application, you would send the form data to your backend
+            const formData = new FormData(this);
+            console.log('Profile update data:', Object.fromEntries(formData));
+
+            // Show animation on save button
+            const saveBtn = this.querySelector('.btn-primary');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '✅ Saved!';
+
+            setTimeout(() => {
+                saveBtn.innerHTML = originalText;
+            }, 2000);
+        });
+
+        // Set department based on current role
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set department to technology by default (you can make this dynamic)
+            document.getElementById('department').value = 'technology';
+        });
+
+        // Password validation
+        document.getElementById('newPassword')?.addEventListener('input', function() {
+            const confirmPassword = document.getElementById('confirmPassword');
+            if (this.value !== confirmPassword.value) {
+                confirmPassword.style.borderColor = 'var(--cyber-orange)';
+            } else {
+                confirmPassword.style.borderColor = 'var(--cyber-emerald)';
+            }
+        });
+
+        document.getElementById('confirmPassword')?.addEventListener('input', function() {
+            const newPassword = document.getElementById('newPassword');
+            if (this.value !== newPassword.value) {
+                this.style.borderColor = 'var(--cyber-orange)';
+            } else {
+                this.style.borderColor = 'var(--cyber-emerald)';
+            }
+        });
+    </script>
+</body>
+</html>

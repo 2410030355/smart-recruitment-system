@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quantum Search - Recruitment AI</title>
+    <style>
+        :root {
+            --cyber-emerald: #00FFAB;
+            --neon-violet: #BC13FE;
+            --quantum-blue: #0066FF;
+            --cyber-orange: #FF6B35;
+            --dark-matter: #0A0A0F;
+            --space-gray: #1A1A2E;
+            --starlight: #E0F7FA;
+            --matrix-green: #00FF41;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--dark-matter) 0%, var(--space-gray) 100%);
+            color: var(--starlight);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(10, 10, 15, 0.8);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 171, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .search-form, .search-info {
+            background: rgba(26, 26, 46, 0.6);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 171, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--cyber-emerald);
+        }
+
+        .form-group textarea,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(0, 255, 171, 0.3);
+            border-radius: 8px;
+            color: var(--starlight);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group textarea {
+            height: 200px;
+            resize: vertical;
+        }
+
+        .file-info {
+            font-size: 0.8rem;
+            color: var(--cyber-emerald);
+            margin-top: 5px;
+        }
+
+        .search-button {
+            background: linear-gradient(135deg, var(--cyber-emerald), var(--quantum-blue));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 171, 0.3);
+        }
+
+        .info-item {
+            background: rgba(0, 255, 171, 0.1);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--cyber-emerald);
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: var(--cyber-emerald);
+            margin-bottom: 10px;
+        }
+
+        .navigation {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            background: var(--quantum-blue);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            margin: 0 10px;
+        }.nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔮 Quantum Search AI</h1>
+            <p>Upload job description and resumes to find perfect matches using AI-powered analysis</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            <div class="search-grid">
+                <div class="search-form">
+                    <h3 style="color: var(--cyber-emerald); margin-bottom: 20px;">Search Parameters</h3>
+
+                    <div class="form-group">
+                        <label for="job_description">
+                            <i class="fas fa-file-alt"></i> Job Description & Requirements
+                        </label>
+                        <textarea id="job_description" name="job_description" placeholder="Enter detailed job description, required skills, qualifications, experience level, etc..." required>Senior Full Stack Developer with 5+ years experience in React, Node.js, and cloud technologies. Strong background in AI/ML integration and team leadership.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resumes">
+                            <i class="fas fa-file-upload"></i> Upload Resumes
+                        </label>
+                        <input type="file" id="resumes" name="resumes" multiple accept=".pdf,.doc,.docx,.txt" required>
+                        <div class="file-info">Supported formats: PDF, DOC, DOCX, TXT (Multiple files allowed)</div>
+                    </div>
+
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-rocket"></i> Launch Quantum Search
+                    </button>
+                </div>
+
+                <div class="search-info">
+                    <h3 style="color: var(--cyber-emerald); margin-bottom: 20px;">How It Works</h3>
+
+                    <div class="info-item">
+                        <div class="info-title">🔍 AI-Powered Analysis</div>
+                        <p>Quantum algorithms analyze resumes against job requirements using neural pattern matching.</p>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-title">📊 Smart Scoring</div>
+                        <p>Each candidate receives a match score based on skills, experience, and requirement alignment.</p>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-title">⚡️ Instant Results</div>
+                        <p>Get comprehensive analysis results with ranked candidates and detailed matching insights.</p>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-title">🎯 Keyword Matching</div>
+                        <p>Identifies key skills, technologies, and qualifications that match your requirements.</p>
+                    </div>
+
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(0, 255, 171, 0.1); border-radius: 8px; border: 1px solid rgba(0, 255, 171, 0.3);">
+                        <h4 style="color: var(--cyber-emerald); margin-bottom: 10px;">🧠 Quantum AI Capabilities</h4>
+                        <ul style="padding-left: 20px; color: var(--starlight); opacity: 0.9;">
+                            <li>Neural pattern recognition</li>
+                            <li>Skill gap analysis</li>
+                            <li>Experience level matching</li>
+                            <li>Cultural fit prediction</li>
+                            <li>Success probability scoring</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="navigation">
+            <a href="/dashboard" class="nav-btn">← Back to Dashboard</a>
+            <a href="/results" class="nav-btn">View Previous Results</a>
+        </div>
+    </div>
+</body>
+</html>

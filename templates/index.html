@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Recruitment AI | API Testing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Previous styles remain the same, adding API testing styles below */
+
+        /* API Testing Section */
+        .api-testing {
+            padding: 80px 0;
+            background-color: #f8f9fa;
+        }
+
+        .testing-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .test-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .test-results {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .test-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .test-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .test-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .test-secondary {
+            background-color: var(--light);
+            color: var(--primary);
+        }
+
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .result-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent);
+            background-color: var(--light);
+            border-radius: 5px;
+        }
+
+        .result-success {
+            border-left-color: var(--success);
+        }
+
+        .result-error {
+            border-left-color: #f44336;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: between;
+            margin-bottom: 10px;
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .result-status {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .status-error {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .candidate-match {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .match-score {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+.match-info h4 {
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .match-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .testing-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header and other sections remain the same -->
+
+    <!-- API Testing Section -->
+    <section class="api-testing">
+        <div class="container">
+            <div class="section-title">
+                <h2>API Testing Interface</h2>
+                <p>Test the Quantum Recruitment AI with sample data or your own inputs</p>
+            </div>
+
+            <div class="testing-container">
+                <div class="test-form">
+                    <h3>Test Parameters</h3>
+                    <div class="form-group">
+                        <label for="api-endpoint">API Endpoint</label>
+                        <select id="api-endpoint">
+                            <option value="/api/match-candidates">Match Candidates</option>
+                            <option value="/api/analyze-profile">Analyze Profile</option>
+                            <option value="/api/neural-pattern">Neural Pattern Analysis</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="job-description">Job Description</label>
+                        <textarea id="job-description" placeholder="Enter job requirements...">Senior Full Stack Developer with 5+ years experience in React, Node.js, and cloud technologies. Strong background in AI/ML integration and team leadership.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sample-data">Sample Data Type</label>
+                        <select id="sample-data">
+                            <option value="tech">Technology Roles</option>
+                            <option value="finance">Finance Roles</option>
+                            <option value="healthcare">Healthcare Roles</option>
+                            <option value="custom">Custom Input</option>
+                        </select>
+                    </div>
+
+                    <div class="test-buttons">
+                        <button class="test-button test-primary" onclick="runTest()">
+                            <i class="fas fa-play"></i> Run Test
+                        </button>
+                        <button class="test-button test-secondary" onclick="loadSampleData()">
+                            <i class="fas fa-download"></i> Load Sample
+                        </button>
+                        <button class="test-button test-secondary" onclick="clearResults()">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div class="test-results">
+                    <h3>Test Results</h3>
+                    <div id="results-container">
+                        <div class="result-item">
+                            <p>Run a test to see results here...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer remains the same -->
+
+2410040126- Sravani, [18-10-2025 10:13 PM]
+<script>
+        // Sample test data
+        const sampleData = {
+            tech: {
+                jobTitle: "Senior Full Stack Developer",
+                description: "Senior Full Stack Developer with 5+ years experience in React, Node.js, and cloud technologies. Strong background in AI/ML integration and team leadership.",
+                requirements: ["React", "Node.js", "Python", "AWS", "MongoDB", "Team Leadership"],
+                candidates: [
+                    { id: 1, name: "Sarah Chen", skills: ["React", "Node.js", "Python", "AWS", "MongoDB", "Team Leadership"], experience: 6, match: 98 },
+                    { id: 2, name: "Marcus Johnson", skills: ["React", "Node.js", "Python", "Azure", "PostgreSQL"], experience: 5, match: 87 },
+                    { id: 3, name: "Alex Rodriguez", skills: ["Vue.js", "PHP", "MySQL", "AWS"], experience: 4, match: 72 },
+                    { id: 4, name: "Priya Patel", skills: ["React", "Node.js", "Python", "ML", "Docker"], experience: 7, match: 95 }
+                ]
+            },
+            finance: {
+                jobTitle: "Financial Analyst",
+                description: "Financial Analyst with expertise in quantitative analysis, risk assessment, and financial modeling. CFA certification preferred.",
+                requirements: ["Financial Modeling", "Excel", "SQL", "Risk Analysis", "CFA"],
+                candidates: [
+                    { id: 1, name: "David Wilson", skills: ["Financial Modeling", "Excel", "SQL", "Risk Analysis", "CFA"], experience: 5, match: 96 },
+                    { id: 2, name: "Emily Zhang", skills: ["Excel", "SQL", "Python", "Risk Analysis"], experience: 3, match: 78 },
+                    { id: 3, name: "Michael Brown", skills: ["Financial Modeling", "Excel", "VBA", "CFA"], experience: 8, match: 89 }
+                ]
+            },
+            healthcare: {
+                jobTitle: "Healthcare Data Scientist",
+                description: "Data Scientist specializing in healthcare analytics, patient data analysis, and predictive modeling for treatment outcomes.",
+                requirements: ["Python", "R", "Healthcare Data", "Machine Learning", "SQL"],
+                candidates: [
+                    { id: 1, name: "Dr. Lisa Wang", skills: ["Python", "R", "Healthcare Data", "Machine Learning", "SQL"], experience: 6, match: 99 },
+                    { id: 2, name: "James O'Connell", skills: ["Python", "Healthcare Data", "Statistics", "Tableau"], experience: 4, match: 82 },
+                    { id: 3, name: "Maria Garcia", skills: ["R", "SQL", "Healthcare Data", "Research"], experience: 7, match: 91 }
+                ]
+            }
+        };
+
+        // API Testing Functions
+        function runTest() {
+            const endpoint = document.getElementById('api-endpoint').value;
+            const jobDescription = document.getElementById('job-description').value;
+            const dataType = document.getElementById('sample-data').value;
+
+            // Show loading state
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML =`
+                <div class="result-item">
+                    <div class="result-header">
+                        <span class="result-title">Processing Request</span>
+                    </div>
+                    <p>Analyzing job description with Quantum Neural Networks...</p>
+                </div>`;
+
+            // Simulate API processing time
+            setTimeout(() => {
+                displayResults(endpoint, dataType, jobDescription);
+            }, 2000);
+        }
+
+        function displayResults(endpoint, dataType, jobDescription) {
+            const resultsContainer = document.getElementById('results-container');
+            const data = sampleData[dataType];
+let resultsHTML = `
+                <div class="result-item result-success">
+                    <div class="result-header">
+                        <span class="result-title">API Test Successful</span>
+                        <span class="result-status status-success">SUCCESS</span>
+                    </div>
+                    <p><strong>Endpoint:</strong> ${endpoint}</p>
+                    <p><strong>Job Title:</strong> ${data.jobTitle}</p>
+                    <p><strong>Neural Analysis Complete:</strong> Pattern matching identified ${data.candidates.length} optimal candidates</p>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-header">
+                        <span class="result-title">Quantum Pattern Analysis</span>
+                    </div>
+                    <p>Neural networks analyzed ${data.requirements.length} key requirements and identified matching cognitive patterns across candidate profiles.</p>
+                </div>
+
+                <h4 style="margin: 20px 0 10px;">Matched Candidates</h4>
+            `;
+
+            // Add candidate matches
+            data.candidates.forEach(candidate => {
+                const skills = candidate.skills.slice(0, 4).join(', ') + (candidate.skills.length > 4 ? '...' : '');
+
+                resultsHTML += `
+                    <div class="candidate-match">
+                        <div class="match-score">${candidate.match}%</div>
+                        <div class="match-info">
+                            <h4>${candidate.name}</h4>
+                            <p><strong>Experience:</strong> ${candidate.experience} years</p>
+                            <p><strong>Skills:</strong> ${skills}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Add quantum analysis details
+            resultsHTML += `
+                <div class="result-item">
+                    <div class="result-header">
+                        <span class="result-title">Quantum Processing Details</span>
+                    </div>
+                    <p><strong>Neural Layers:</strong> 12 quantum-enhanced layers</p>
+                    <p><strong>Pattern Nodes:</strong> 1,248 activated nodes</p>
+                    <p><strong>Processing Time:</strong> 1.8 seconds (traditional systems: 45+ minutes)</p>
+                    <p><strong>Encryption Level:</strong> Quantum-resistant AES-512</p>
+                </div>
+            `;
+
+            resultsContainer.innerHTML = resultsHTML;
+        }
+
+        function loadSampleData() {
+            const dataType = document.getElementById('sample-data').value;
+            const data = sampleData[dataType];
+
+            document.getElementById('job-description').value = data.description;
+
+            // Show notification
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML = `
+                <div class="result-item result-success">
+                    <div class="result-header">
+                        <span class="result-title">Sample Data Loaded</span>
+                        <span class="result-status status-success">LOADED</span>
+                    </div>
+                    <p>Loaded sample data for <strong>${data.jobTitle}</strong> position</p>
+                    <p>Ready to test Quantum Recruitment AI matching capabilities</p>
+                </div>
+            `;
+        }
+
+        function clearResults() {
+            document.getElementById('results-container').innerHTML = `
+                <div class="result-item">
+                    <p>Run a test to see results here...</p>
+                </div>
+            `;
+        }
+
+        // Initialize with sample data
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSampleData();
+        });
+    </script>
+</body>
+</html>

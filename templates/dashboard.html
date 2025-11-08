@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quantum Recruitment Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --cyber-emerald: #00FFAB;
+            --neon-violet: #BC13FE;
+            --quantum-blue: #0066FF;
+            --cyber-orange: #FF6B35;
+            --dark-matter: #0A0A0F;
+            --space-gray: #1A1A2E;
+            --starlight: #E0F7FA;
+            --matrix-green: #00FF41;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--dark-matter) 0%, var(--space-gray) 100%);
+            color: var(--starlight);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-right: 340px; /* Space for recruiter panel */
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px;
+            background: rgba(10, 10, 15, 0.8);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 171, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--cyber-emerald), var(--starlight));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 255, 171, 0.5);
+        }
+
+        .recruiter-info-main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .recruiter-avatar-main {
+            font-size: 2rem;
+        }
+
+        .recruiter-details-main {
+            text-align: left;
+        }
+
+        .recruiter-name-main {
+            font-weight: 600;
+            color: var(--cyber-emerald);
+        }
+
+        .recruiter-company-main {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Dashboard Actions */
+        .dashboard-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--cyber-emerald), var(--quantum-blue));
+            color: var(--dark-matter);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 255, 171, 0.3);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 255, 171, 0.4);
+        }
+
+        .action-btn.profile {
+            background: rgba(0, 255, 171, 0.1);
+            color: var(--cyber-emerald);
+            border: 1px solid var(--cyber-emerald);
+        }
+
+        .action-btn.active {
+            background: var(--cyber-emerald);
+            color: var(--dark-matter);
+            box-shadow: 0 0 20px rgba(0, 255, 171, 0.5);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+.metric-card {
+            background: rgba(10, 10, 15, 0.8);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(0, 255, 171, 0.2);
+            text-align: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--cyber-emerald);
+            box-shadow: 0 15px 40px rgba(0, 255, 171, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--cyber-emerald), var(--matrix-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 15px 0;
+            text-shadow: 0 0 20px rgba(0, 255, 171, 0.5);
+        }
+
+        /* Recruiter Panel */
+        .recruiter-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(0, 255, 171, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 320px;
+            z-index: 1000;
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .recruiter-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 255, 171, 0.2);
+        }
+
+        .recruiter-avatar {
+            font-size: 2rem;
+        }
+
+        .recruiter-details {
+            flex: 1;
+        }
+
+        .recruiter-name {
+            font-weight: 600;
+            color: var(--cyber-emerald);
+            font-size: 1.1rem;
+        }
+
+        .recruiter-company, .recruiter-role {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            line-height: 1.3;
+        }
+
+        .recent-selections {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .recent-selections h4 {
+            color: var(--cyber-emerald);
+            margin-bottom: 15px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .selection-item {
+            background: rgba(26, 26, 46, 0.6);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(0, 255, 171, 0.2);
+            transition: all 0.3s;
+        }
+
+        .selection-item:hover {
+            transform: translateX(-5px);
+            border-color: var(--cyber-emerald);
+            box-shadow: 0 5px 15px rgba(0, 255, 171, 0.2);
+        }
+
+        .selection-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .candidate-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--starlight);
+        }
+
+        .selection-score {
+            background: var(--cyber-emerald);
+            color: var(--dark-matter);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .candidate-role {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            color: var(--cyber-emerald);
+            margin-bottom: 3px;
+        }
+
+        .selection-date {
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+.quick-actions {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 255, 171, 0.2);
+        }
+
+        .quick-btn {
+            display: block;
+            text-align: center;
+            background: rgba(0, 255, 171, 0.1);
+            color: var(--cyber-emerald);
+            padding: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-bottom: 8px;
+            border: 1px solid rgba(0, 255, 171, 0.2);
+        }
+
+        .quick-btn:hover {
+            background: rgba(0, 255, 171, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .quick-btn.logout {
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--cyber-orange);
+            border-color: rgba(255, 107, 53, 0.2);
+        }
+
+        .quick-btn.logout:hover {
+            background: rgba(255, 107, 53, 0.2);
+        }
+
+        /* API Testing Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: rgba(26, 26, 46, 0.95);
+            margin: 2% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 255, 171, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 25px;
+            top: 20px;
+            font-size: 2rem;
+            color: var(--cyber-emerald);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close:hover {
+            transform: scale(1.2);
+            text-shadow: 0 0 15px rgba(0, 255, 171, 0.7);
+        }
+
+        .testing-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .test-form, .test-results {
+            background: rgba(10, 10, 15, 0.6);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 171, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--cyber-emerald);
+        }
+
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(0, 255, 171, 0.3);
+            border-radius: 8px;
+            color: var(--starlight);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .test-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .test-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .test-primary {
+            background: linear-gradient(135deg, var(--cyber-emerald), var(--quantum-blue));
+            color: var(--dark-matter);
+        }
+
+        .test-secondary {
+            background: rgba(0, 255, 171, 0.1);
+            color: var(--cyber-emerald);
+            border: 1px solid var(--cyber-emerald);
+        }
+
+.test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 171, 0.3);
+        }
+
+        .result-item {
+            background: rgba(0, 255, 171, 0.1);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--cyber-emerald);
+        }
+
+        .candidate-match {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(0, 255, 171, 0.2);
+        }
+
+        .match-score {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--cyber-emerald);
+            color: var(--dark-matter);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Quantum Search Modal */
+        .search-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .search-form, .search-preview {
+            background: rgba(10, 10, 15, 0.6);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 171, 0.2);
+        }
+
+        .search-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .search-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .search-primary {
+            background: linear-gradient(135deg, var(--cyber-emerald), var(--quantum-blue));
+            color: var(--dark-matter);
+        }
+
+        .search-secondary {
+            background: rgba(0, 255, 171, 0.1);
+            color: var(--cyber-emerald);
+            border: 1px solid var(--cyber-emerald);
+        }
+
+        .search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 171, 0.3);
+        }
+
+        .preview-item {
+            background: rgba(0, 255, 171, 0.1);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--cyber-emerald);
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .preview-title {
+            font-weight: 600;
+            color: var(--cyber-emerald);
+        }
+
+        .preview-status {
+            background: var(--cyber-emerald);
+            color: var(--dark-matter);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-content {
+                padding-right: 0;
+                margin-right: 340px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-right: 0;
+                padding: 0 10px;
+            }
+
+            .recruiter-panel {
+                position: relative;
+                width: 100%;
+                margin-bottom: 20px;
+                right: 0;
+                top: 0;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testing-container, .search-container {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+.action-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .dashboard-header {
+                padding: 20px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+        }
+        .file-info {
+    font-size: 0.8rem;
+    color: var(--cyber-emerald);
+    margin-top: 5px;
+}
+    </style>
+</head>
+<body>
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h1>🧠 QUANTUM RECRUITMENT DASHBOARD</h1>
+
+            <div class="recruiter-info-main">
+                <div class="recruiter-avatar-main">
+                    👨‍💼
+                </div>
+                <div class="recruiter-details-main">
+                    <div class="recruiter-name-main">Welcome back, {{ data.recruiter.name }}</div>
+                    <div class="recruiter-company-main">Quantum Recruitment AI • Senior Recruiter</div>
+                </div>
+            </div>
+
+            <div class="dashboard-actions">
+                <a href="/dashboard" class="action-btn active">
+                    <i class="fas fa-home"></i>
+                    MAIN PORTAL
+                </a>
+                <a href="/results" class="action-btn">
+                    <i class="fas fa-chart-bar"></i>
+                    VIEW RESULTS
+                </a>
+                <button class="action-btn" onclick="showAPITesting()">
+                    <i class="fas fa-code"></i>
+                    API TESTING
+                </button>
+                <button class="action-btn" onclick="showQuantumSearch()">
+                    <i class="fas fa-search"></i>
+                    QUANTUM SEARCH
+                </button>
+                <a href="/profile" class="action-btn profile">
+                    <i class="fas fa-user"></i>
+                    MY PROFILE
+                </a>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="metric-card">
+                <h3>🔄 Total Candidates</h3>
+                <div class="stat-number">{{ data.total_candidates }}</div>
+                <p>Quantum database entries</p>
+            </div>
+            <div class="metric-card">
+                <h3>⚡️ Interview Rate</h3>
+                <div class="stat-number">{{ data.interviews }}</div>
+                <p>Neural matches initiated</p>
+            </div>
+            <div class="metric-card">
+                <h3>🎯 Hire Rate</h3>
+                <div class="stat-number">{{ data.hired }}</div>
+                <p>Successful placements</p>
+            </div>
+            <div class="metric-card">
+                <h3>🚀 Match Accuracy</h3>
+                <div class="stat-number">94%</div>
+                <p>Quantum algorithm precision</p>
+            </div>
+            <div class="metric-card">
+                <h3>⏱️ Processing Time</h3>
+                <div class="stat-number">1.8s</div>
+                <p>Average neural analysis</p>
+            </div>
+            <div class="metric-card">
+                <h3>🔒 Security Level</h3>
+                <div class="stat-number">AES-512</div>
+                <p>Quantum encryption</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recruiter Panel -->
+    <div class="recruiter-panel">
+        <div class="recruiter-header">
+            <div class="recruiter-avatar">
+                👨‍💼
+            </div>
+            <div class="recruiter-details">
+                <div class="recruiter-name">{{ data.recruiter.name }}</div>
+                <div class="recruiter-company">Quantum Recruitment AI</div>
+                <div class="recruiter-role">Senior Recruiter</div>
+            </div>
+        </div>
+
+        <div class="recent-selections">
+            <h4>
+                <i class="fas fa-clock"></i> RECENT SELECTIONS
+            </h4>
+
+2410040126- Sravani, [18-10-2025 10:10 PM]
+{% if data.recruiter.recent_selections %}
+                {% for selection in data.recruiter.recent_selections %}
+                <div class="selection-item">
+                    <div class="selection-header">
+                        <div class="candidate-name">{{ selection.name }}</div>
+                        <div class="selection-score">{{ selection.score }}%</div>
+                    </div>
+                    <div class="candidate-role">{{ selection.role }}</div>
+                    <div class="selection-date">{{ selection.date }}</div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div style="text-align: center; padding: 20px; color: var(--starlight); opacity: 0.6;">
+                    <i class="fas fa-inbox" style="font-size: 1.5rem; margin-bottom: 10px;"></i>
+                    <p style="margin: 0; font-size: 0.85rem;">No recent selections</p>
+                    <p style="margin: 5px 0 0 0; font-size: 0.75rem; opacity: 0.6;">Use Quantum Search to find candidates</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="quick-actions">
+            <a href="/profile" class="quick-btn">
+                <i class="fas fa-user-cog"></i> Edit Profile
+            </a>
+            <a href="/logout" class="quick-btn logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- API Testing Modal -->
+    <div id="apiTestingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideAPITesting()">&times;</span>
+            <h2 style="color: var(--cyber-emerald); margin-bottom: 10px;">
+                <i class="fas fa-code"></i> API TESTING INTERFACE
+            </h2>
+            <p style="color: var(--starlight); opacity: 0.8; margin-bottom: 30px;">
+                Test Quantum Recruitment AI with multiple input methods
+            </p>
+
+            <div class="testing-container">
+                <div class="test-form">
+                    <h3 style="color: var(--cyber-emerald); margin-bottom: 20px;">Test Parameters</h3>
+
+                    <div class="form-group">
+                        <label for="api-endpoint">API Endpoint</label>
+                        <select id="api-endpoint">
+                            <option value="/api/match-candidates">Match Candidates</option>
+                            <option value="/api/analyze-profile">Analyze Profile</option>
+                            <option value="/api/neural-pattern">Neural Pattern Analysis</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="job-description">Job Description</label>
+                        <textarea id="job-description" placeholder="Enter job requirements...">Senior Full Stack Developer with 5+ years experience in React, Node.js, and cloud technologies. Strong background in AI/ML integration and team leadership.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sample-data">Sample Data Type</label>
+                        <select id="sample-data">
+                            <option value="tech">Technology Roles</option>
+                            <option value="finance">Finance Roles</option>
+                            <option value="healthcare">Healthcare Roles</option>
+                        </select>
+                    </div>
+
+2410040126- Sravani, [18-10-2025 10:10 PM]
+<div class="test-buttons">
+                        <button class="test-button test-primary" onclick="runTest()">
+                            <i class="fas fa-play"></i> Run Test
+                        </button>
+                        <button class="test-button test-secondary" onclick="loadSampleData()">
+                            <i class="fas fa-download"></i> Load Sample
+                        </button>
+                        <button class="test-button test-secondary" onclick="clearResults()">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div class="test-results">
+                    <h3 style="color: var(--cyber-emerald); margin-bottom: 20px;">Test Results</h3>
+                    <div id="results-container">
+                        <div class="result-item">
+                            <p>Run a test to see quantum analysis results...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quantum Search Modal -->
+    <div id="quantumSearchModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideQuantumSearch()">&times;</span>
+            <h2 style="color: var(--cyber-emerald); margin-bottom: 10px;">
+                <i class="fas fa-search"></i> QUANTUM SEARCH AI
+            </h2>
+            <p style="color: var(--starlight); opacity: 0.8; margin-bottom: 30px;">
+                Upload job description and resumes to find perfect matches using AI-powered analysis
+            </p>
+
+            <form id="quantumSearchForm" action="/quantum-search" method="POST" enctype="multipart/form-data">
+                <div class="search-container">
+                    <div class="search-form">
+                        <h3 style="color: var(--cyber-emerald); margin-bottom: 20px;">Search Parameters</h3>
+
+                        <div class="form-group">
+                            <label for="job_description">
+                                <i class="fas fa-file-alt"></i> Job Description & Requirements
+                            </label>
+                            <textarea id="job_description" name="job_description" placeholder="Enter detailed job description, required skills, qualifications, experience level, etc..." required>Senior Full Stack Developer with 5+ years experience in React, Node.js, and cloud technologies. Strong background in AI/ML integration and team leadership.</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="resumes">
+                                <i class="fas fa-file-upload"></i> Upload Resumes
+                            </label>
+                            <input type="file" id="resumes" name="resumes" multiple accept=".pdf,.doc,.docx,.txt" required>
+                            <div class="file-info">Supported formats: PDF, DOC, DOCX, TXT (Multiple files allowed)</div>
+                        </div>
+
+                        <div class="search-buttons">
+                            <button type="submit" class="search-button search-primary">
+                                <i class="fas fa-rocket"></i> Launch Quantum Search
+                            </button>
+                            <button type="button" class="search-button search-secondary" onclick="loadSampleJob()">
+                                <i class="fas fa-download"></i> Load Sample
+                            </button>
+                            <button type="button" class="search-button search-secondary" onclick="clearForm()">
+                                <i class="fas fa-trash"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="search-preview">
+                        <h3 style="color: var(--cyber-emerald); margin-bottom: 20px;">How It Works</h3>
+
+2410040126- Sravani, [18-10-2025 10:10 PM]
+<div class="preview-item">
+                            <div class="preview-header">
+                                <div class="preview-title">🔍 AI-Powered Analysis</div>
+                                <div class="preview-status">ACTIVE</div>
+                            </div>
+                            <p>Quantum algorithms analyze resumes against job requirements using neural pattern matching.</p>
+                        </div>
+
+                        <div class="preview-item">
+                            <div class="preview-header">
+                                <div class="preview-title">📊 Smart Scoring</div>
+                                <div class="preview-status">0-100%</div>
+                            </div>
+                            <p>Each candidate receives a match score based on skills, experience, and requirement alignment.</p>
+                        </div>
+
+                        <div class="preview-item">
+                            <div class="preview-header">
+                                <div class="preview-title">⚡️ Instant Results</div>
+                                <div class="preview-status">REAL-TIME</div>
+                            </div>
+                            <p>Get comprehensive analysis results with ranked candidates and detailed matching insights.</p>
+                        </div>
+
+                        <div class="preview-item">
+                            <div class="preview-header">
+                                <div class="preview-title">🎯 Keyword Matching</div>
+                                <div class="preview-status">PATTERN RECOGNITION</div>
+                            </div>
+                            <p>Identifies key skills, technologies, and qualifications that match your requirements.</p>
+                        </div>
+
+                        <div style="margin-top: 20px; padding: 15px; background: rgba(0, 255, 171, 0.1); border-radius: 8px; border: 1px solid rgba(0, 255, 171, 0.3);">
+                            <h4 style="color: var(--cyber-emerald); margin-bottom: 10px;">🧠 Quantum AI Capabilities</h4>
+                            <ul style="padding-left: 20px; color: var(--starlight); opacity: 0.9;">
+                                <li>Neural pattern recognition</li>
+                                <li>Skill gap analysis</li>
+                                <li>Experience level matching</li>
+                                <li>Cultural fit prediction</li>
+                                <li>Success probability scoring</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+<script>
+    // Modal Functions
+    function showAPITesting() {
+        console.log("Opening API Testing Modal");
+        document.getElementById('apiTestingModal').style.display = 'block';
+        loadSampleData();
+    }
+
+    function hideAPITesting() {
+        document.getElementById('apiTestingModal').style.display = 'none';
+    }
+
+    function showQuantumSearch() {
+        console.log("Opening Quantum Search Modal");
+        document.getElementById('quantumSearchModal').style.display = 'block';
+    }
+
+    function hideQuantumSearch() {
+        document.getElementById('quantumSearchModal').style.display = 'none';
+    }
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+        const apiModal = document.getElementById('apiTestingModal');
+        const quantumModal = document.getElementById('quantumSearchModal');
+
+        if (event.target === apiModal) {
+            hideAPITesting();
+        }
+        if (event.target === quantumModal) {
+            hideQuantumSearch();
+        }
+    }
+
+    // Close modals with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            hideAPITesting();
+            hideQuantumSearch();
+        }
+    });
+
+// Sample test data for API Testing
+    const sampleData = {
+        tech: {
+            jobTitle: "Senior Full Stack Developer",
+            description: "Senior Full Stack Developer with 5+ years experience in React, Node.js, and cloud technologies. Strong background in AI/ML integration and team leadership.",
+            requirements: ["React", "Node.js", "Python", "AWS", "MongoDB", "Team Leadership"],
+            candidates: [
+                { id: 1, name: "Sarah Chen", skills: ["React", "Node.js", "Python", "AWS", "MongoDB", "Team Leadership"], experience: 6, match: 98 },
+                { id: 2, name: "Marcus Johnson", skills: ["React", "Node.js", "Python", "Azure", "PostgreSQL"], experience: 5, match: 87 },
+                { id: 3, name: "Alex Rodriguez", skills: ["Vue.js", "PHP", "MySQL", "AWS"], experience: 4, match: 72 },
+                { id: 4, name: "Priya Patel", skills: ["React", "Node.js", "Python", "ML", "Docker"], experience: 7, match: 95 }
+            ]
+        },
+        finance: {
+            jobTitle: "Financial Analyst",
+            description: "Financial Analyst with expertise in quantitative analysis, risk assessment, and financial modeling. CFA certification preferred.",
+            requirements: ["Financial Modeling", "Excel", "SQL", "Risk Analysis", "CFA"],
+            candidates: [
+                { id: 1, name: "David Wilson", skills: ["Financial Modeling", "Excel", "SQL", "Risk Analysis", "CFA"], experience: 5, match: 96 },
+                { id: 2, name: "Emily Zhang", skills: ["Excel", "SQL", "Python", "Risk Analysis"], experience: 3, match: 78 },
+                { id: 3, name: "Michael Brown", skills: ["Financial Modeling", "Excel", "VBA", "CFA"], experience: 8, match: 89 }
+            ]
+        },
+        healthcare: {
+            jobTitle: "Healthcare Data Scientist",
+            description: "Data Scientist specializing in healthcare analytics, patient data analysis, and predictive modeling for treatment outcomes.",
+            requirements: ["Python", "R", "Healthcare Data", "Machine Learning", "SQL"],
+            candidates: [
+                { id: 1, name: "Dr. Lisa Wang", skills: ["Python", "R", "Healthcare Data", "Machine Learning", "SQL"], experience: 6, match: 99 },
+                { id: 2, name: "James O'Connell", skills: ["Python", "Healthcare Data", "Statistics", "Tableau"], experience: 4, match: 82 },
+                { id: 3, name: "Maria Garcia", skills: ["R", "SQL", "Healthcare Data", "Research"], experience: 7, match: 91 }
+            ]
+        }
+    };
+
+    // API Testing Functions
+    function runTest() {
+        const endpoint = document.getElementById('api-endpoint').value;
+        const jobDescription = document.getElementById('job-description').value;
+        const dataType = document.getElementById('sample-data').value;
+
+        // Show loading state
+        const resultsContainer = document.getElementById('results-container');
+        resultsContainer.innerHTML = `
+            <div class="result-item">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>Processing quantum analysis...</span>
+                </div>
+            </div>
+        `;
+
+        // Simulate API processing time
+        setTimeout(() => {
+            displayResults(endpoint, dataType, jobDescription);
+        }, 2000);
+    }
+
+    function displayResults(endpoint, dataType, jobDescription) {
+        const resultsContainer = document.getElementById('results-container');
+        const data = sampleData[dataType];
+
+let resultsHTML = `
+            <div class="result-item">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <strong style="color: var(--cyber-emerald);">API Test Successful</strong>
+                    <span style="background: var(--cyber-emerald); color: var(--dark-matter); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">SUCCESS</span>
+                </div>
+                <p><strong>Endpoint:</strong> ${endpoint}</p>
+                <p><strong>Job Title:</strong> ${data.jobTitle}</p>
+                <p><strong>Quantum Analysis:</strong> Pattern matching identified ${data.candidates.length} optimal candidates</p>
+            </div>
+
+            <div class="result-item">
+                <strong style="color: var(--cyber-emerald);">Neural Pattern Analysis</strong>
+                <p style="margin-top: 8px;">Quantum networks analyzed ${data.requirements.length} key requirements and identified matching cognitive patterns.</p>
+            </div>
+
+            <h4 style="color: var(--starlight); margin: 20px 0 10px;">Matched Candidates</h4>
+        `;
+
+        // Add candidate matches
+        data.candidates.forEach(candidate => {
+            const skills = candidate.skills.slice(0, 4).join(', ') + (candidate.skills.length > 4 ? '...' : '');
+
+            resultsHTML += `
+                <div class="candidate-match">
+                    <div class="match-score">${candidate.match}%</div>
+                    <div>
+                        <h4 style="margin: 0 0 5px 0; color: var(--starlight);">${candidate.name}</h4>
+                        <p style="margin: 0; font-size: 0.9rem; opacity: 0.8;"><strong>Experience:</strong> ${candidate.experience} years</p>
+                        <p style="margin: 0; font-size: 0.9rem; opacity: 0.8;"><strong>Skills:</strong> ${skills}</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Add quantum analysis details
+        resultsHTML += `
+            <div class="result-item" style="margin-top: 20px;">
+                <strong style="color: var(--cyber-emerald);">Quantum Processing Details</strong>
+                <div style="margin-top: 10px;">
+                    <p style="margin: 5px 0;"><strong>Neural Layers:</strong> 12 quantum-enhanced layers</p>
+                    <p style="margin: 5px 0;"><strong>Pattern Nodes:</strong> 1,248 activated nodes</p>
+                    <p style="margin: 5px 0;"><strong>Processing Time:</strong> 1.8 seconds (traditional: 45+ minutes)</p>
+                    <p style="margin: 5px 0;"><strong>Encryption:</strong> Quantum-resistant AES-512</p>
+                </div>
+            </div>
+        `;
+
+        resultsContainer.innerHTML = resultsHTML;
+    }
+
+    function loadSampleData() {
+        const dataType = document.getElementById('sample-data').value;
+        const data = sampleData[dataType];
+
+        document.getElementById('job-description').value = data.description;
+
+        // Show notification
+        const resultsContainer = document.getElementById('results-container');
+        resultsContainer.innerHTML = `
+            <div class="result-item">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <strong style="color: var(--cyber-emerald);">Sample Data Loaded</strong>
+                    <span style="background: var(--cyber-emerald); color: var(--dark-matter); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">LOADED</span>
+                </div>
+                <p>Loaded sample data for <strong>${data.jobTitle}</strong> position</p>
+                <p>Ready to test Quantum Recruitment AI capabilities</p>
+            </div>
+        `;
+    }
+
+    function clearResults() {
+        document.getElementById('results-container').innerHTML = `
+            <div class="result-item">
+                <p>Run a test to see quantum analysis results...</p>
+            </div>
+        `;
+    }
+// Quantum Search Functions
+    function loadSampleJob() {
+        const sampleJob = `Senior Full Stack Developer with 5+ years experience in:
+Key Requirements:
+• React.js and modern JavaScript frameworks
+• Node.js and Express.js backend development
+• Python for AI/ML integration
+• AWS cloud services and deployment
+• MongoDB and PostgreSQL databases
+• Docker and containerization
+• RESTful API design and development
+• Team leadership and project management
+
+Nice to Have:
+• Machine Learning experience
+• DevOps and CI/CD pipelines
+• Microservices architecture
+• Agile methodology experience`;
+
+        document.getElementById('job_description').value = sampleJob;
+        showNotification('Sample job description loaded!', 'success');
+    }
+
+    function clearForm() {
+        document.getElementById('quantumSearchForm').reset();
+        showNotification('Form cleared!', 'info');
+    }
+
+    function showNotification(message, type) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? 'var(--cyber-emerald)' : 'var(--cyber-orange)'};
+            color: var(--dark-matter);
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 3000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transform: translateX(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        `;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+            notification.style.opacity = '1';
+        }, 100);
+
+        // Animate out and remove
+        setTimeout(() => {
+            notification.style.transform = 'translateX(100px)';
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 3000);
+    }
+
+    // Handle file selection for Quantum Search
+    document.getElementById('resumes').addEventListener('change', function(e) {
+        const files = e.target.files;
+        if (files.length > 0) {
+            showNotification(`Selected ${files.length} resume(s) for analysis`, 'success');
+        }
+    });
+
+    // Debug function to check if modals are working
+    function debugModals() {
+        console.log('API Modal:', document.getElementById('apiTestingModal'));
+        console.log('Quantum Modal:', document.getElementById('quantumSearchModal'));
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Dashboard loaded successfully');
+        debugModals();
+    });
+</script>
+</body>
+</html>

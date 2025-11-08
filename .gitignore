@@ -1,0 +1,23 @@
+# API Keys and Config
+config.py
+*.key
+.env
+
+# Python
+pycache/
+*.pyc
+
+# Uploads
+uploads/
+*.pdf
+*.doc
+*.docx
+*.txt
+
+# PyCharm
+.idea/
+*.iml
+
+# System
+.DS_Store
+Thumbs.db
